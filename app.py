@@ -22,4 +22,4 @@ def image_upload():
     return jsonify({'sentences': sentences})
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(threaded=True, port=5000)
