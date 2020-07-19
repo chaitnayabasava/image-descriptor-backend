@@ -1,11 +1,11 @@
-FROM python:3.7.8-stretch
+FROM python:3.7
 
 # Setting up Docker environment
 WORKDIR /code
-# Export env variables.
-ENV FLASK_APP app.py
-ENV FLASK_RUN_HOST 0.0.0.0
-###
+
+ENV FLASK_APP=app
+ENV FLASK_RUN_PORT=5000
+ENV FLASK_RUN_HOST=0.0.0.0
 
 # Copy requirements file from current directory to file in 
 # containers 'code' director
