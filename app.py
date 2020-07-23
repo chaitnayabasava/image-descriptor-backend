@@ -2,7 +2,7 @@ from flask import request, Flask
 from flask import jsonify
 from flask_cors import CORS, cross_origin
 from PIL import Image
-import io
+import io, os
 
 from predict import get_predictions
 
@@ -27,4 +27,4 @@ def image_upload():
     return jsonify({'sentences': sentences})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=os.environ.get("PORT", 5000))
