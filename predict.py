@@ -5,12 +5,12 @@ from torch.autograd import Variable
 
 from utils.clean_sentence import clean_sentence
 from utils.load_checkpoint import load_checkpoint
-from utils.transforms import transform_val
+from utils.transforms import transform
 
 from image_descriptors.LSTM import lstm
 from image_descriptors.attentionLSTM import attention_lstm
 
-from inference.LSTM_decoder import beam_search_lstm, greedy_search_lstm
+from inference.LSTM_decoder import beam_search_lstm
 from inference.Attention_decoder import beam_search_attention
 
 vocab_file = "./vocab.pkl"
@@ -21,19 +21,19 @@ with open(vocab_file, "rb") as f:
 
 device = torch.device("cpu")
 
+encoder_lstm, decoder_lstm = lstm(len(vocab))
+encoder_att, decoder_att = attention_lstm(len(vocab))
+
+encoder_lstm, decoder_lstm = load_checkpoint(encoder_lstm, decoder_lstm, device, model_dir, "lstm")
+encoder_att, decoder_att = load_checkpoint(encoder_att, decoder_att, device, model_dir, "attention")
+
 def get_predictions(img, model, beam):
     if model == "lstm":
-        encoder, decoder = lstm(len(vocab))
+        encoder, decoder = encoder_lstm, decoder_lstm
     elif model == "attention":
-        encoder, decoder = attention_lstm(len(vocab))
+        encoder, decoder = encoder_att, decoder_att
 
-    encoder, decoder = load_checkpoint(encoder, decoder, device, model_dir, model)
-
-    encoder.eval()
-    decoder.eval()
-
-    img = transform_val(img).float()
-    img = img.unsqueeze_(0)
+    img = transform(img).float().unsqueeze_(0)
     img = Variable(img)
 
     visual_features = encoder(img)
