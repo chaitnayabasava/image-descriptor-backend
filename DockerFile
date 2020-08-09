@@ -8,6 +8,7 @@ WORKDIR /code
 COPY requirements.txt requirements.txt
 
 # Run and install all required modules in container
+RUN pip install --upgrade pip
 RUN pip3 install -r requirements.txt
 RUN pip3 install torch==1.5.1+cpu torchvision==0.6.1+cpu -f https://download.pytorch.org/whl/torch_stable.html
 
@@ -15,4 +16,4 @@ RUN pip3 install torch==1.5.1+cpu torchvision==0.6.1+cpu -f https://download.pyt
 COPY . .
 
 # RUN app.
-CMD ["python", "app.py"]
+CMD gunicorn app:app --bind 0.0.0.0:$PORT --reload
