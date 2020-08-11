@@ -1,7 +1,7 @@
 FROM python:3.7
 
 # Setting up Docker environment
-WORKDIR /code
+WORKDIR /root
 
 # Copy requirements file from current directory to file in 
 # containers 'code' director
@@ -14,6 +14,8 @@ RUN pip3 install torch==1.5.1+cpu torchvision==0.6.1+cpu -f https://download.pyt
 
 # Copy current directory files to containers code directory
 COPY . .
+
+RUN python -c "exec(\"import nltk\nfrom torchvision.models import resnet50\nnltk.download('punkt')\nresnet50(pretrained=True)\")"
 
 # RUN app.
 CMD gunicorn app:app --bind 0.0.0.0:$PORT --reload
