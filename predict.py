@@ -32,6 +32,8 @@ def get_predictions(img, model, beam):
         encoder, decoder = encoder_lstm, decoder_lstm
     elif model == "attention":
         encoder, decoder = encoder_att, decoder_att
+    else:
+        return []
 
     img = transform(img).float().unsqueeze_(0)
     img = Variable(img)
